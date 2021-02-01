@@ -201,7 +201,7 @@ class Database {
         const db = await this.connect();
         const collection = await db.collection(collectionName);
         const schemaBuilder = new SchemaBuilder(collection);
-        callback(schemaBuilder);
+        await callback(schemaBuilder);
         return schemaBuilder.build();
       },
       createCollection: async (collectionName, callback) => {
@@ -218,7 +218,7 @@ class Database {
         }
         const collection = await db.createCollection(collectionName);
         const schemaBuilder = new SchemaBuilder(collection);
-        callback(schemaBuilder);
+        await callback(schemaBuilder);
         return schemaBuilder.build();
       },
       createCollectionIfNotExists: async (collectionName, callback) => {
@@ -233,7 +233,7 @@ class Database {
         ) {
           const collection = await db.createCollection(collectionName);
           const schemaBuilder = new SchemaBuilder(collection);
-          callback(schemaBuilder);
+          await callback(schemaBuilder);
           return schemaBuilder.build();
         }
       },
