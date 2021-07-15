@@ -1,5 +1,5 @@
 {
-  "name": "@zakodium/lucid-mongo",
+  "name": "@ruanitto/lucid-mongo",
   "description": "A Mongodb ODM",
   "main": "index.js",
   "version": "4.1.0",

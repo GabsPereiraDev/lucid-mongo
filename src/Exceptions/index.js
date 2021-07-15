@@ -28,8 +28,8 @@ class RuntimeException extends GE.RuntimeException {
    *
    * @return {Object}
    */
-  static missingDatabaseConnection (name) {
-    return new this(`Missing database connection {${name}}. Make sure you define it inside config/database.js file`, 500, 'E_MISSING_DB_CONNECTION')
+  static missingDatabaseConnection(name) {
+    return new this(`Missing database connection {${name}}. Make sure you define it inside config/mongodatabase.js file`, 500, 'E_MISSING_DB_CONNECTION')
   }
 
   /**
@@ -42,7 +42,7 @@ class RuntimeException extends GE.RuntimeException {
    *
    * @return {Object}
    */
-  static unSavedModel (name) {
+  static unSavedModel(name) {
     return new this(`Cannot process relation, since ${name} model is not persisted to database or relational value is undefined`, 500, 'E_UNSAVED_MODEL_INSTANCE')
   }
 
@@ -57,7 +57,7 @@ class RuntimeException extends GE.RuntimeException {
    *
    * @return {Object}
    */
-  static undefinedRelation (relation, name) {
+  static undefinedRelation(relation, name) {
     return new this(`${relation} is not defined on ${name} model`, 500, 'E_INVALID_MODEL_RELATION')
   }
 
@@ -73,7 +73,7 @@ class RuntimeException extends GE.RuntimeException {
    *
    * @return {Object}
    */
-  static cannotNestRelation (relation, parent, method) {
+  static cannotNestRelation(relation, parent, method) {
     const message = `${method} does not allowed nested relations. Instead use .with('${parent}', (builder) => builder.${method}('${relation}'))`
     return new this(message, 500, 'E_CANNOT_NEST_RELATION')
   }
@@ -88,7 +88,7 @@ class RuntimeException extends GE.RuntimeException {
    *
    * @return {Object}
    */
-  static overRidingRelation (relation) {
+  static overRidingRelation(relation) {
     return new this(`Trying to eagerload ${relation} relationship twice`, 500, 'E_CANNOT_OVERRIDE_RELATION')
   }
 
@@ -102,7 +102,7 @@ class RuntimeException extends GE.RuntimeException {
    *
    * @return {Object}
    */
-  static migrationsAreLocked (lockCollection) {
+  static migrationsAreLocked(lockCollection) {
     return new this(`Migrations are locked. Make sure you are not multiple migration scripts or delete \`${lockCollection}\` collection manually`)
   }
 }
@@ -114,7 +114,7 @@ class RuntimeException extends GE.RuntimeException {
  * @constructor
  */
 class ModelException extends GE.LogicalException {
-  static deletedInstance (name) {
+  static deletedInstance(name) {
     return new this(`Cannot edit deleted model instance for ${name} model`, 500, 'E_DELETED_MODEL')
   }
 }
@@ -127,7 +127,7 @@ class ModelException extends GE.LogicalException {
  * @constructor
  */
 class ModelNotFoundException extends GE.LogicalException {
-  static raise (name) {
+  static raise(name) {
     return new this(`Cannot find database row for ${name} model`, 404, 'E_MISSING_DATABASE_ROW')
   }
 }
@@ -154,7 +154,7 @@ class ModelRelationException extends GE.LogicalException {
    *
    * @return {Object}
    */
-  static unSupportedMethod (method, relation) {
+  static unSupportedMethod(method, relation) {
     return new this(`${method} is not supported by ${relation} relation`, 500, 'E_INVALID_RELATION_METHOD')
   }
 
@@ -169,7 +169,7 @@ class ModelRelationException extends GE.LogicalException {
    *
    * @return {Object}
    */
-  static unsavedModelInstance (message) {
+  static unsavedModelInstance(message) {
     return new this(message, 500, 'E_UNSAVED_MODEL_INSTANCE')
   }
 
@@ -184,7 +184,7 @@ class ModelRelationException extends GE.LogicalException {
    *
    * @return {Object}
    */
-  static pivotModelIsDefined (method) {
+  static pivotModelIsDefined(method) {
     return new this(`Cannot call ${method} since pivotModel has been defined`, 500, 'E_INVALID_RELATION_METHOD')
   }
 }

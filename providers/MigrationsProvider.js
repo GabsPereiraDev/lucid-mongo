@@ -22,9 +22,9 @@ class MigrationsProvider extends ServiceProvider {
    *
    * @private
    */
-  _registerSchema () {
-    this.app.bind('Adonis/Src/Schema', () => require('../src/Schema'))
-    this.app.alias('Adonis/Src/Schema', 'Schema')
+  _registerSchema() {
+    this.app.bind('Adonis/Src/MongoSchema', () => require('../src/Schema'))
+    this.app.alias('Adonis/Src/MongoSchema', 'MongoSchema')
   }
 
   /**
@@ -37,9 +37,9 @@ class MigrationsProvider extends ServiceProvider {
    *
    * @private
    */
-  _registerFactory () {
-    this.app.bind('Adonis/Src/Factory', () => require('../src/Factory'))
-    this.app.alias('Adonis/Src/Factory', 'Factory')
+  _registerFactory() {
+    this.app.bind('Adonis/Src/MongoFactory', () => require('../src/Factory'))
+    this.app.alias('Adonis/Src/MongoFactory', 'MongoFactory')
   }
 
   /**
@@ -50,13 +50,13 @@ class MigrationsProvider extends ServiceProvider {
    *
    * @return {void}
    */
-  _registerCommands () {
-    this.app.bind('Adonis/Commands/Migration:Run', () => require('../commands/MigrationRun'))
-    this.app.bind('Adonis/Commands/Migration:Rollback', () => require('../commands/MigrationRollback'))
-    this.app.bind('Adonis/Commands/Migration:Refresh', () => require('../commands/MigrationRefresh'))
-    this.app.bind('Adonis/Commands/Migration:Reset', () => require('../commands/MigrationReset'))
-    this.app.bind('Adonis/Commands/Migration:Status', () => require('../commands/MigrationStatus'))
-    this.app.bind('Adonis/Commands/Seed', () => require('../commands/Seed'))
+  _registerCommands() {
+    this.app.bind('Adonis/Commands/MongoMigration:Run', () => require('../commands/MigrationRun'))
+    this.app.bind('Adonis/Commands/MongoMigration:Rollback', () => require('../commands/MigrationRollback'))
+    this.app.bind('Adonis/Commands/MongoMigration:Refresh', () => require('../commands/MigrationRefresh'))
+    this.app.bind('Adonis/Commands/MongoMigration:Reset', () => require('../commands/MigrationReset'))
+    this.app.bind('Adonis/Commands/MongoMigration:Status', () => require('../commands/MigrationStatus'))
+    this.app.bind('Adonis/Commands/MongoSeed', () => require('../commands/Seed'))
   }
 
   /**
@@ -69,14 +69,14 @@ class MigrationsProvider extends ServiceProvider {
    *
    * @private
    */
-  _registerMigration () {
-    this.app.singleton('Adonis/Src/Migration', (app) => {
+  _registerMigration() {
+    this.app.singleton('Adonis/Src/MongoMigration', (app) => {
       const Config = app.use('Adonis/Src/Config')
-      const Database = app.use('Adonis/Src/Database')
+      const MongoDatabase = app.use('Adonis/Src/MongoDatabase')
       const Migration = require('../src/Migration')
-      return new Migration(Config, Database)
+      return new Migration(Config, MongoDatabase)
     })
-    this.app.alias('Adonis/Src/Migration', 'Migration')
+    this.app.alias('Adonis/Src/MongoMigration', 'MongoMigration')
   }
 
   /**
@@ -86,7 +86,7 @@ class MigrationsProvider extends ServiceProvider {
    *
    * @return {void}
    */
-  register () {
+  register() {
     this._registerSchema()
     this._registerFactory()
     this._registerMigration()
@@ -100,14 +100,14 @@ class MigrationsProvider extends ServiceProvider {
    *
    * @return {void}
    */
-  boot () {
+  boot() {
     const ace = require('@adonisjs/ace')
-    ace.addCommand('Adonis/Commands/Migration:Run')
-    ace.addCommand('Adonis/Commands/Migration:Rollback')
-    ace.addCommand('Adonis/Commands/Migration:Refresh')
-    ace.addCommand('Adonis/Commands/Migration:Reset')
-    ace.addCommand('Adonis/Commands/Migration:Status')
-    ace.addCommand('Adonis/Commands/Seed')
+    ace.addCommand('Adonis/Commands/MongoMigration:Run')
+    ace.addCommand('Adonis/Commands/MongoMigration:Rollback')
+    ace.addCommand('Adonis/Commands/MongoMigration:Refresh')
+    ace.addCommand('Adonis/Commands/MongoMigration:Reset')
+    ace.addCommand('Adonis/Commands/MongoMigration:Status')
+    ace.addCommand('Adonis/Commands/MongoSeed')
   }
 }
 

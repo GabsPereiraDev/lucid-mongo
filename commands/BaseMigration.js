@@ -13,11 +13,11 @@ const { Command } = require('@adonisjs/ace')
 const requireAll = require('require-all')
 
 class BaseMigration extends Command {
-  static get inject () {
-    return ['Adonis/Src/Migration', 'Adonis/Src/Helpers']
+  static get inject() {
+    return ['Adonis/Src/MongoMigration', 'Adonis/Src/Helpers']
   }
 
-  constructor (migration, helpers) {
+  constructor(migration, helpers) {
     super()
     this._migrationsPath = helpers.migrationsPath()
     this.migration = migration
@@ -32,7 +32,7 @@ class BaseMigration extends Command {
    *
    * @private
    */
-  _getSchemaFiles () {
+  _getSchemaFiles() {
     return requireAll({
       dirname: this._migrationsPath,
       filters: /(.*)\.js$/
@@ -53,7 +53,7 @@ class BaseMigration extends Command {
    *
    * @throws {Error} If NODE_ENV is production
    */
-  _validateState (force) {
+  _validateState(force) {
     if (process.env.NODE_ENV === 'production' && !force) {
       throw new Error('Cannot run migrations in production. Use --force flag to continue')
     }
@@ -68,7 +68,7 @@ class BaseMigration extends Command {
    * @param {Boolean} conditional
    * @param {Function} fn
    */
-  execIfNot (conditional, fn) {
+  execIfNot(conditional, fn) {
     if (!conditional) {
       fn()
     }

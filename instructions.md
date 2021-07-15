@@ -114,13 +114,13 @@ Edit the config/auth.js file for including the serializer. For example on the ap
 
 ## Usage
 
-Once done you can access `Database` provider and run mongo queries as follows.
+Once done you can access `MongoDatabase` provider and run mongo queries as follows.
 
 ```js
-const Database = use('Database');
+const MongoDatabase = use('MongoDatabase');
 
-await Database.collection('users').find();
-await Database.collection('users').paginate();
+await MongoDatabase.collection('users').find();
+await MongoDatabase.collection('users').paginate();
 ```
 
 ## Migrations Provider
@@ -130,7 +130,7 @@ This repo also comes with a migrations and seeds provider to run to migrate your
 Make sure to register migrations provider under `aceProviders` array.
 
 ```js
-const aceProviders = ['@zakodium/lucid-mongo/providers/MigrationsProvider'];
+const aceProviders = ['@ruanitto/lucid-mongo/providers/MigrationsProvider'];
 ```
 
-After this running `adonis --help` will list a set of commands under `migration` namespace.
+After this running `adonis --help` will list a set of commands under `mongomigration` namespace.

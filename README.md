@@ -1,3 +1,5 @@
+# Fork from @zakodium/lucid-mongo but modified to work parallel with @adonis/lucid 
+
 # Lucid Mongo
 
 lucid-mongo is a mongo query builder and ORM. It also has support for database migrations, seeds and factories as @adonis/lucid.
@@ -34,24 +36,24 @@ This repo/branch is supposed to run fine on all major OS platforms and targets `
 Install npm using `adonis` command.
 
 ```js
-adonis install @zakodium/lucid-mongo
+adonis install @ruanitto/lucid-mongo
 ```
 
-Make sure to register the lucid provider to make use of `Database` and `LucidMongo` models. The providers are registered inside `start/app.js`
+Make sure to register the lucid provider to make use of `MongoDatabase` and `LucidMongo` models. The providers are registered inside `start/app.js`
 
 ```js
 const providers = [
   // ...
-  '@zakodium/lucid-mongo/providers/LucidMongoProvider'
+  '@ruanitto/lucid-mongo/providers/LucidMongoProvider'
 ];
 
 const aceProviders = [
   // ...
-  '@zakodium/lucid-mongo/providers/MigrationsProvider'
+  '@ruanitto/lucid-mongo/providers/MigrationsProvider'
 ];
 ```
 
-the config automatic create to `config/database.js` file
+the config automatic create to `config/mongodatabase.js` file
 
 ```js
 module.exports = {
@@ -142,7 +144,7 @@ Edit the config/auth.js file for including the serializer. For example on the ap
 To setup this package as standalone package
 
 ```bash
-$ npm i @zakodium/lucid-mongo
+$ npm i @ruanitto/lucid-mongo
 ```
 
 ```js
@@ -499,8 +501,8 @@ After get from db it will be retransformed to
 ### Use mquery builder
 
 ```js
-const Database = use('Database');
-const db = await Database.connect('mongodb');
+const MongoDatabase = use('MongoDatabase');
+const db = await MongoDatabase.connect('mongodb');
 
 const users = await db.collection('users').find();
 
@@ -520,8 +522,8 @@ const count = await db
 In case the query builder does not match your requirement you can get mongodbClient to do your custom query
 
 ```js
-const Database = use('Database');
-const mongoClient = await Database.connect();
+const MongoDatabase = use('MongoDatabase');
+const mongoClient = await MongoDatabase.connect();
 const result = await mongoClient
   .collection('inventory')
   .find({ size: { h: 14, w: 21, uom: 'cm' } })

@@ -23,35 +23,35 @@ let config = null
  * The config class for using lucid standalone
  */
 class Config {
-  constructor (map) {
+  constructor(map) {
     this._map = map
   }
 
-  get (connection) {
+  get(connection) {
     return _.get(this._map, connection)
   }
 }
 
 class Ioc {
-  constructor () {
+  constructor() {
     this._bindings = {}
   }
 
-  bind (name, implementation) {
+  bind(name, implementation) {
     this._bindings[name] = implementation
   }
 
-  use (name) {
+  use(name) {
     return this._bindings[name]
   }
 
-  make (name) {
+  make(name) {
     return this._bindings[name]
   }
 }
 
 class Resolver {
-  forDir () {
+  forDir() {
   }
 }
 
@@ -63,32 +63,32 @@ iocResolver.setFold({ ioc, resolver })
 module.exports = function (configMap) {
   config = new Config({ database: configMap })
 
-  const Database = require('./src/Database/Manager')
-  const Model = require('./src/LucidMongo/Model')
-  const Schema = require('./src/Schema')
-  const Migration = require('./src/Migration')
-  const Factory = require('./src/Factory')
-  const db = new Database(config)
-  ioc.bind('Adonis/Src/Database', db)
+  const MongoDatabase = require('./src/Database/Manager')
+  const MongoModel = require('./src/LucidMongo/Model')
+  const MongoSchema = require('./src/Schema')
+  const MongoMigration = require('./src/Migration')
+  const MongoFactory = require('./src/Factory')
+  const db = new MongoDatabase(config)
+  ioc.bind('Adonis/Src/MongoDatabase', db)
 
   return {
     db,
-    Model,
-    Schema,
-    Migration,
-    Factory,
+    MongoModel,
+    MongoSchema,
+    MongoMigration,
+    MongoFactory,
     Models: {
-      add (name, implementation) {
+      add(name, implementation) {
         implementation._bootIfNotBooted()
         ioc.bind(`model:${name}`, implementation)
         return this
       },
 
-      get (name) {
+      get(name) {
         return ioc.use(`model:${name}`)
       },
 
-      clear () {
+      clear() {
         _.each(ioc._bindings, (value, name) => {
           if (name.startsWith('model:')) {
             delete ioc._bindings[name]

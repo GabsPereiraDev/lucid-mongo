@@ -22,7 +22,7 @@ const util = require('../../../lib/util');
 const { ioc } = require('../../../lib/iocResolver');
 
 const proxyHandler = {
-  get: proxyGet('query', false, function(target, name) {
+  get: proxyGet('query', false, function (target, name) {
     const queryScope = util.makeScopeName(name);
 
     /**
@@ -30,7 +30,7 @@ const proxyHandler = {
      * execute it
      */
     if (typeof target.Model[queryScope] === 'function') {
-      return function(...args) {
+      return function (...args) {
         target.Model[queryScope](this, ...args);
         return this;
       };
@@ -55,7 +55,7 @@ class QueryBuilder {
     /**
      * Reference to database provider
      */
-    this.db = ioc.use('Adonis/Src/Database').connection(connection);
+    this.db = ioc.use('Adonis/Src/MongoDatabase').connection(connection);
 
     /**
      * mquery
@@ -125,7 +125,7 @@ class QueryBuilder {
    *
    * @return {Object}
    */
-  on(event, callback) {}
+  on(event, callback) { }
 
   /**
    * This method will apply all the global query scopes
@@ -564,7 +564,7 @@ class QueryBuilder {
     } else if (_.isObject(args[0])) {
       _.forEach(args[0], (scope, key) => this.with(key, scope));
     } else {
-      this._eagerLoads[args[0]] = (builder) => {};
+      this._eagerLoads[args[0]] = (builder) => { };
     }
     return this;
   }

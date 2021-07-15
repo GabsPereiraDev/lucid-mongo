@@ -30,7 +30,7 @@ const proxyHandler = {
 
     const queryBuilder = target.query();
     if (typeof queryBuilder[name] !== 'function') {
-      throw new Error(`Database.${name} is not a function`);
+      throw new Error(`MongoDatabase.${name} is not a function`);
     }
 
     /**

@@ -26,9 +26,9 @@ const CE = require('../Exceptions')
  * @constructor
  */
 class Migration {
-  constructor (Config, Database) {
+  constructor(Config, Database) {
     this.db = Database
-    this._migrationsCollection = Config.get('database.migrationsCollection', 'adonis_schema')
+    this._migrationsCollection = Config.get('mongodatabase.migrationsCollection', 'adonis_schema')
     this._lockCollection = `${this._migrationsCollection}_lock`
   }
 
@@ -42,7 +42,7 @@ class Migration {
    *
    * @private
    */
-  _makeMigrationsCollection () {
+  _makeMigrationsCollection() {
     return this.db.schema.createCollectionIfNotExists(this._migrationsCollection, (collection) => {
       collection.increments()
       collection.string('name')
@@ -61,7 +61,7 @@ class Migration {
    *
    * @private
    */
-  _makeLockCollection () {
+  _makeLockCollection() {
     return this.db.schema.createCollectionIfNotExists(this._lockCollection, (collection) => {
       collection.increments()
       collection.boolean('is_locked')
@@ -77,7 +77,7 @@ class Migration {
    *
    * @private
    */
-  _addLock () {
+  _addLock() {
     return this.db.collection(this._lockCollection).insert({ is_locked: true })
   }
 
@@ -91,7 +91,7 @@ class Migration {
    *
    * @private
    */
-  _removeLock () {
+  _removeLock() {
     return this.db.schema.dropCollectionIfExists(this._lockCollection)
   }
 
@@ -106,7 +106,7 @@ class Migration {
    *
    * @private
    */
-  async _checkForLock () {
+  async _checkForLock() {
     const hasLock = await this.db
       .collection(this._lockCollection)
       .where('is_locked', true)
@@ -130,7 +130,7 @@ class Migration {
    *
    * @private
    */
-  async _getLatestBatch () {
+  async _getLatestBatch() {
     const batch = await this.db.collection(this._migrationsCollection).aggregate('max', 'batch')
     return Number(batch | 0)
   }
@@ -149,7 +149,7 @@ class Migration {
    *
    * @private
    */
-  _addForBatch (name, batch) {
+  _addForBatch(name, batch) {
     return this.db.collection(this._migrationsCollection).insert({ name, batch })
   }
 
@@ -166,7 +166,7 @@ class Migration {
    *
    * @private
    */
-  _remove (name) {
+  _remove(name) {
     return this.db.collection(this._migrationsCollection).delete({ name })
   }
 
@@ -186,7 +186,7 @@ class Migration {
    *
    * @private
    */
-  async _getAfterBatch (batch = 0) {
+  async _getAfterBatch(batch = 0) {
     const query = this.db.collection(this._migrationsCollection).sort('name')
     if (batch > 0) {
       query.where('batch', '>', batch)
@@ -209,7 +209,7 @@ class Migration {
    *
    * @private
    */
-  async _getDiff (names, direction = 'up', batch) {
+  async _getDiff(names, direction = 'up', batch) {
     const schemas = direction === 'down'
       ? await this._getAfterBatch(batch)
       : await this.db.collection(this._migrationsCollection).pluck('name')
@@ -231,7 +231,7 @@ class Migration {
    *
    * @private
    */
-  async _executeSchema (schemaInstance, direction, toSQL, name) {
+  async _executeSchema(schemaInstance, direction, toSQL, name) {
     await schemaInstance[direction]()
     const queries = await schemaInstance.executeActions(toSQL)
     return toSQL ? { queries, name } : void 0
@@ -250,7 +250,7 @@ class Migration {
    *
    * @private
    */
-  async _execute (schemas, direction, batch, toSQL) {
+  async _execute(schemas, direction, batch, toSQL) {
     for (let schema in schemas) {
       await this._executeSchema(new schemas[schema](this.db), direction)
       direction === 'up' ? await this._addForBatch(schema, batch) : await this._remove(schema)
@@ -270,7 +270,7 @@ class Migration {
    *
    * @private
    */
-  async _getQueries (schemas, direction) {
+  async _getQueries(schemas, direction) {
     return Promise.all(_.map(schemas, (Schema, name) => {
       return this._executeSchema(new Schema(this.db), direction, true, name)
     }))
@@ -284,7 +284,7 @@ class Migration {
    *
    * @return {void}
    */
-  async _cleanup () {
+  async _cleanup() {
     await this._removeLock()
     this.db.close()
   }
@@ -300,7 +300,7 @@ class Migration {
    *
    * @throws {Error} If any of schema file throws exception
    */
-  async up (schemas, toSQL) {
+  async up(schemas, toSQL) {
     await this._makeMigrationsCollection()
     await this._makeLockCollection()
     await this._checkForLock()
@@ -367,7 +367,7 @@ class Migration {
    *
    * @throws {Error} If something blows in schema file
    */
-  async down (schemas, batch, toSQL = false) {
+  async down(schemas, batch, toSQL = false) {
     await this._makeMigrationsCollection()
     await this._makeLockCollection()
     await this._checkForLock()
@@ -434,7 +434,7 @@ class Migration {
    *
    * @return {Object}
    */
-  async status (schemas) {
+  async status(schemas) {
     const migrated = await this.db
       .collection(this._migrationsCollection)
       .sort('name')

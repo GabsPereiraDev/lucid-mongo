@@ -21,7 +21,7 @@ const { ioc } = require('../../lib/iocResolver')
  * @constructor
  */
 class DatabaseFactory {
-  constructor (collectionName, dataCallback) {
+  constructor(collectionName, dataCallback) {
     this.collectionName = collectionName
     this.dataCallback = dataCallback
     this._returningColumn = null
@@ -38,10 +38,10 @@ class DatabaseFactory {
    *
    * @private
    */
-  _getQueryBuilder () {
+  _getQueryBuilder() {
     return (this._connection
-      ? ioc.use('Adonis/Src/Database').connection(this._connection)
-      : ioc.use('Adonis/Src/Database')).collection(this.collectionName)
+      ? ioc.use('Adonis/Src/MongoDatabase').connection(this._connection)
+      : ioc.use('Adonis/Src/MongoDatabase')).collection(this.collectionName)
   }
 
   /**
@@ -59,7 +59,7 @@ class DatabaseFactory {
    *
    * @private
    */
-  async _makeOne (index, data) {
+  async _makeOne(index, data) {
     const hash = await this.dataCallback(chancejs, index, data)
     const keys = _.keys(hash)
 
@@ -89,7 +89,7 @@ class DatabaseFactory {
    *
    * @chainable
    */
-  collection (collectionName) {
+  collection(collectionName) {
     this.collectionName = collectionName
     return this
   }
@@ -104,7 +104,7 @@ class DatabaseFactory {
    *
    * @chainable
    */
-  returning (column) {
+  returning(column) {
     this._returningColumn = column
     return this
   }
@@ -119,7 +119,7 @@ class DatabaseFactory {
    *
    * @chainable
    */
-  connection (connection) {
+  connection(connection) {
     this._connection = connection
     return this
   }
@@ -136,7 +136,7 @@ class DatabaseFactory {
    *
    * @return {Object}
    */
-  async make (data = {}, index = 0) {
+  async make(data = {}, index = 0) {
     return this._makeOne(index, data)
   }
 
@@ -152,7 +152,7 @@ class DatabaseFactory {
    *
    * @return {Array}
    */
-  async makeMany (instances, data = {}) {
+  async makeMany(instances, data = {}) {
     return Promise.all(_.map(_.range(instances), (index) => this.make(data, index)))
   }
 
@@ -167,7 +167,7 @@ class DatabaseFactory {
    *
    * @return {Object}
    */
-  async create (data = {}, index = 0) {
+  async create(data = {}, index = 0) {
     const attributes = await this.make(data, index)
     const query = this._getQueryBuilder()
     return query.insert(attributes)
@@ -185,7 +185,7 @@ class DatabaseFactory {
    *
    * @return {Array}
    */
-  async createMany (numberOfRows, data = {}) {
+  async createMany(numberOfRows, data = {}) {
     return Promise.all(_.map(_.range(numberOfRows), (index) => this.create(data, index)))
   }
 
@@ -197,7 +197,7 @@ class DatabaseFactory {
    *
    * @return {Number}
    */
-  async reset () {
+  async reset() {
     const query = this._getQueryBuilder()
     return query.delete()
   }

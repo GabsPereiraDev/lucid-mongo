@@ -19,8 +19,8 @@ class MigrationStatus extends BaseMigration {
    *
    * @return {String}
    */
-  static get signature () {
-    return 'migration:status'
+  static get signature() {
+    return 'mongomigration:status'
   }
 
   /**
@@ -30,7 +30,7 @@ class MigrationStatus extends BaseMigration {
    *
    * @return {String}
    */
-  static get description () {
+  static get description() {
     return 'Check migrations current status'
   }
 
@@ -42,7 +42,7 @@ class MigrationStatus extends BaseMigration {
    *
    * @return {void|Array}
    */
-  async handle () {
+  async handle() {
     try {
       const migrations = await this.migration.status(this._getSchemaFiles())
       const head = ['File name', 'Migrated', 'Batch']

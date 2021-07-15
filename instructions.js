@@ -13,8 +13,8 @@ const path = require('path')
 
 module.exports = async function (cli) {
   try {
-    await cli.makeConfig('database.js', path.join(__dirname, './templates/config.mustache'))
-    cli.command.completed('create', 'config/database.js')
+    await cli.makeConfig('mongodatabase.js', path.join(__dirname, './templates/config.mustache'))
+    cli.command.completed('create', 'config/mongodatabase.js')
   } catch (error) {
     // ignore errors
   }

@@ -22,13 +22,13 @@ class LucidMongoProvider extends ServiceProvider {
    *
    * @private
    */
-  _registerDatabase () {
-    this.app.singleton('Adonis/Src/Database', (app) => {
+  _registerDatabase() {
+    this.app.singleton('Adonis/Src/MongoDatabase', (app) => {
       const Config = app.use('Adonis/Src/Config')
-      const Database = require('../src/Database/Manager')
-      return new Database(Config)
+      const MongoDatabase = require('../src/Database/Manager')
+      return new MongoDatabase(Config)
     })
-    this.app.alias('Adonis/Src/Database', 'Database')
+    this.app.alias('Adonis/Src/MongoDatabase', 'MongoDatabase')
   }
 
   /**
@@ -41,15 +41,15 @@ class LucidMongoProvider extends ServiceProvider {
    *
    * @private
    */
-  _registerModel () {
-    this.app.bind('Adonis/Src/Model', (app) => require('../src/LucidMongo/Model'))
-    this.app.alias('Adonis/Src/Model', 'Model')
+  _registerModel() {
+    this.app.bind('Adonis/Src/MongoModel', (app) => require('../src/LucidMongo/Model'))
+    this.app.alias('Adonis/Src/MongoModel', 'MongoModel')
   }
 
   /**
    * Registering the serializer for auth
    */
-  _registerSerializer () {
+  _registerSerializer() {
     try {
       if (ioc.use('Adonis/Src/Auth')) {
         ioc.extend('Adonis/Src/Auth',
@@ -67,11 +67,11 @@ class LucidMongoProvider extends ServiceProvider {
    *
    * @private
    */
-  _addUniqueRule () {
+  _addUniqueRule() {
     try {
       const { extend } = this.app.use('Adonis/Addons/Validator')
-      const Database = this.app.use('Adonis/Src/Database')
-      const validatorRules = new (require('../src/Validator'))(Database)
+      const MongoDatabase = this.app.use('Adonis/Src/MongoDatabase')
+      const validatorRules = new (require('../src/Validator'))(MongoDatabase)
 
       /**
        * Extend by adding the rule
@@ -87,7 +87,7 @@ class LucidMongoProvider extends ServiceProvider {
    *
    * @return {void}
    */
-  register () {
+  register() {
     this._registerDatabase()
     this._registerModel()
     this._registerSerializer()
@@ -100,7 +100,7 @@ class LucidMongoProvider extends ServiceProvider {
    *
    * @return {void}
    */
-  boot () {
+  boot() {
     this._addUniqueRule()
 
     /**
