@@ -388,7 +388,7 @@ class Database {
   async find() {
     const connection = await this.connect();
     const collection = connection.collection(this.collectionName);
-    return this.queryBuilder.collection(collection).find();
+    return this.queryBuilder.collection(collection).find({});
   }
 
   /**
@@ -424,7 +424,7 @@ class Database {
    */
   async pluck(field) {
     this.queryBuilder.select(field);
-    const result = await this.find();
+    const result = await this.find({});
     return _.map(result, field);
   }
 
@@ -469,7 +469,7 @@ class Database {
       .collection(collection)
       .limit(limit)
       .skip((page || 1) * limit)
-      .find();
+      .find({});
     const result = util.makePaginateMeta(countByQuery || 0, page, limit);
     result.data = rows;
     return result;

@@ -191,7 +191,7 @@ class Migration {
     if (batch > 0) {
       query.where('batch', '>', batch)
     }
-    const rows = await query.find()
+    const rows = await query.find({})
     return rows.map((row) => row.name)
   }
 
@@ -438,7 +438,7 @@ class Migration {
     const migrated = await this.db
       .collection(this._migrationsCollection)
       .sort('name')
-      .find()
+      .find({})
 
     this.db.close()
     return _.map(schemas, (schema, name) => {

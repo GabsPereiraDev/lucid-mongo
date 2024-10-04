@@ -73,7 +73,7 @@ class ValidatorRules {
       }
 
       query
-        .find()
+        .find({})
         .then((rows) => {
           /**
            * Unique validation fails when a row has been found

@@ -255,7 +255,7 @@ class QueryBuilder {
      * Execute query
      */
     const collection = await this.db.getCollection(this.collection);
-    const rows = await this.query.collection(collection).find();
+    const rows = await this.query.collection(collection).find({});
 
     /**
      * Convert to an array of model instances
@@ -372,7 +372,7 @@ class QueryBuilder {
     countQuery._fields = undefined;
     const countByQuery = await countQuery.collection(collection).count();
     this.query.limit(limit).skip((page - 1) * limit);
-    const rows = await this.query.collection(collection).find();
+    const rows = await this.query.collection(collection).find({});
 
     const result = util.makePaginateMeta(countByQuery || 0, page, limit);
 

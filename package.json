@@ -1,8 +1,8 @@
 {
-  "name": "@ruanitto/lucid-mongo",
+  "name": "@geiras/lucid-mongo",
   "description": "A Mongodb ODM",
   "main": "index.js",
-  "version": "4.2.1",
+  "version": "4.2.2",
   "scripts": {},
   "keywords": [
     "adonis",

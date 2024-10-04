@@ -504,7 +504,7 @@ After get from db it will be retransformed to
 const MongoDatabase = use('MongoDatabase');
 const db = await MongoDatabase.connect('mongodb');
 
-const users = await db.collection('users').find();
+const users = await db.collection('users').find({});
 
 const phone = await db
   .collection('phones')

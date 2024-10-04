@@ -119,7 +119,7 @@ Once done you can access `MongoDatabase` provider and run mongo queries as follo
 ```js
 const MongoDatabase = use('MongoDatabase');
 
-await MongoDatabase.collection('users').find();
+await MongoDatabase.collection('users').find({});
 await MongoDatabase.collection('users').paginate();
 ```
 
