@@ -11,8 +11,8 @@
 
 const _ = require('lodash')
 const moment = require('moment')
-const GeoPoint = require('geo-point')
-const ObjectID = require('mongodb').ObjectID
+const { GeoPoint } = require('geo-point')
+const ObjectId = require('mongodb').ObjectId
 const VanillaSerializer = require('../Serializers/Vanilla')
 const { ioc } = require('../../../lib/iocResolver')
 const GE = require('@adonisjs/generic-exceptions')
@@ -51,8 +51,8 @@ class BaseModel {
   }
 
   /**
-   * The attributes to be considered as ObjectID.
-   * By default ['_id'] are considered as ObjectID.
+   * The attributes to be considered as ObjectId.
+   * By default ['_id'] are considered as ObjectId.
    *
    * @attribute objectIDs
    *
@@ -149,7 +149,7 @@ class BaseModel {
       return this.formatDates(key, value)
     }
     if (this.objectIDs.includes(key)) {
-      return this.formatObjectID(key, value)
+      return this.formatObjectId(key, value)
     }
     if (this.geometries.includes(key)) {
       return this.formatGeometry(key, value)
@@ -183,19 +183,19 @@ class BaseModel {
   /**
    * Format objectID fields
    *
-   * @method formatObjectID
+   * @method formatObjectId
    *
    * @param  {String}    key
-   * @param  {String|ObjectID}    value
+   * @param  {String|ObjectId}    value
    *
    * @return {String}
    */
-  static formatObjectID (key, value) {
+  static formatObjectId (key, value) {
     try {
       if (Array.isArray(value)) {
-        return _.map(value, item => this.formatObjectID(key, item))
+        return _.map(value, item => this.formatObjectId(key, item))
       } else {
-        return ObjectID(value)
+        return new ObjectId(value)
       }
     } catch (_) {}
     return value
@@ -274,7 +274,7 @@ class BaseModel {
    * This method is executed when toJSON is called on a
    * model or collection of models.
    *
-   * @method castObjectID
+   * @method castObjectId
    *
    * @param  {String}  key
    * @param  {Moment}  value
@@ -283,7 +283,7 @@ class BaseModel {
    *
    * @static
    */
-  static castObjectID (key, value) {
+  static castObjectId (key, value) {
     return String(value)
   }
 
@@ -316,7 +316,7 @@ class BaseModel {
       return this.constructor.parseDates(key, value)
     }
     if (this.constructor.objectIDs.includes(key)) {
-      return this.constructor.parseObjectID(key, value)
+      return this.constructor.parseObjectId(key, value)
     }
     if (this.constructor.geometries.includes(key)) {
       return this.constructor.parseGeometry(key, value)
@@ -347,26 +347,26 @@ class BaseModel {
   /**
    * This method is executed when set value of attribute.
    *
-   * @method parseObjectID
+   * @method parseObjectId
    *
    * @param  {String}  key
-   * @param  {String|ObjectID}  value
+   * @param  {String|ObjectId}  value
    *
-   * @return {ObjectID}
+   * @return {ObjectId}
    *
    * @static
    */
-  static parseObjectID (key, value) {
-    if (value instanceof ObjectID || value === null) {
+  static parseObjectId (key, value) {
+    if (value instanceof ObjectId || value === null) {
       return value
     } else if (_.isString(value)) {
-      return ObjectID(value)
+      return new ObjectId(value)
     } else if (Array.isArray(value) || _.isPlainObject(value)) {
-      return _.map(value, item => this.parseObjectID(key, item))
+      return _.map(value, item => this.parseObjectId(key, item))
     }
     throw GE
       .InvalidArgumentException
-      .invalidParameter(`Can not convert ${JSON.stringify(value)} to mongo ObjectID`)
+      .invalidParameter(`Can not convert ${JSON.stringify(value)} to mongo ObjectId`)
   }
 
   /**
@@ -445,7 +445,7 @@ class BaseModel {
    *
    * @method instantiate
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @private
    */
@@ -495,7 +495,7 @@ class BaseModel {
    *
    * @param  {Object} attributes
    *
-   * @return {void}
+   * @return {undefined}
    */
   fill (attributes) {
     this.$attributes = {}
@@ -510,7 +510,7 @@ class BaseModel {
    *
    * @param  {Object} attributes
    *
-   * @return {void}
+   * @return {undefined}
    */
   merge (attributes) {
     _.each(attributes, (value, key) => this.set(key, value))
@@ -521,7 +521,7 @@ class BaseModel {
    *
    * @method freeze
    *
-   * @return {void}
+   * @return {undefined}
    */
   freeze () {
     this.$frozen = true
@@ -532,7 +532,7 @@ class BaseModel {
    *
    * @method unfreeze
    *
-   * @return {void}
+   * @return {undefined}
    */
   unfreeze () {
     this.$frozen = false

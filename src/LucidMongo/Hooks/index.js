@@ -64,7 +64,7 @@ class Hooks {
    * @param  {Function|String}   handler
    * @param  {String}   [name]
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @example
    * ```
@@ -90,7 +90,7 @@ class Hooks {
    * @param  {String}      event
    * @param  {String}      name
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @example
    * ```js
@@ -115,7 +115,7 @@ class Hooks {
    *
    * @param  {String}          event
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @example
    * ```
@@ -143,7 +143,7 @@ class Hooks {
    * @param  {String} event
    * @param  {Spread} ...args
    *
-   * @return {void}
+   * @return {undefined}
    */
   async exec (event, ...args) {
     const handlers = this._handlers[event] || []
@@ -161,7 +161,7 @@ class Hooks {
     /**
      * Execute all handlers in sequence
      */
-    for (let handler of allHandlers) {
+    for (const handler of allHandlers) {
       const { method } = resolver.forDir('modelHooks').resolveFunc(handler.handler)
       await method(...args)
     }

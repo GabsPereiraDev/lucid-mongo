@@ -32,7 +32,7 @@ class PivotModel extends BaseModel {
    *
    * @method _instantiate
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @private
    */
@@ -53,7 +53,7 @@ class PivotModel extends BaseModel {
    *
    * @param  {Object} row
    *
-   * @return {void}
+   * @return {undefined}
    */
   newUp (row) {
     this.$persisted = true
@@ -115,7 +115,7 @@ class PivotModel extends BaseModel {
    * @param  {String} name
    * @param  {Mixed} value
    *
-   * @return {void}
+   * @return {undefined}
    */
   set (name, value) {
     this.$attributes[name] = value
@@ -144,7 +144,7 @@ class PivotModel extends BaseModel {
    * @method save
    * @async
    *
-   * @return {void}
+   * @return {undefined}
    */
   async save () {
     /**
@@ -152,15 +152,15 @@ class PivotModel extends BaseModel {
      * relationship via `withTimestamps` method.
      */
     if (this.$withTimestamps) {
-      this.$attributes['created_at'] = moment().toISOString()
-      this.$attributes['updated_at'] = moment().toISOString()
+      this.$attributes.created_at = moment().toISOString()
+      this.$attributes.updated_at = moment().toISOString()
     }
 
     const result = await this
       .query(this.$collection, this.$connection)
       .insert(this.$attributes)
 
-    this.primaryKeyValue = result.insertedIds
+    this.primaryKeyValue = result.insertedId
     this.$persisted = true
     this.$frozen = true
   }

@@ -3,15 +3,17 @@
 Make sure to register the lucid mongo provider to make use of `Database` and `LucidMongo` models. The providers are registered inside `start/app.js`
 
 ```js
-const providers = ['@zakodium/lucid-mongo/providers/LucidMongoProvider'];
+const providers = [
+  'lucid-mongo/providers/LucidMongoProvider'
+]
 ```
 
 ### Config mongodb collection
-
 the config automatic create to `config/database.js` file
 
 ```js
 module.exports = {
+
   /*
   |--------------------------------------------------------------------------
   | Default Connection
@@ -46,12 +48,12 @@ module.exports = {
       }
     }
   }
-};
+}
 ```
 
 ### Environment Variables
 
-The configuration file `config/database.js` references **environment variables** from `.env` file. Make sure to set them accordingly for development and production envorinment.
+The configuration file `config/database.js` references **environment variables** from `.env` file. Make sure to set them accordingly for development and production envorinment. 
 
 ```
 DB_CONNECTION=mongodb
@@ -68,9 +70,7 @@ DB_DATABASE=adonis
 ```
 
 ### Configuring Auth serializer
-
 Edit the config/auth.js file for including the serializer. For example on the api schema
-
 ```js
   session: {
     serializer: 'LucidMongo',
@@ -79,7 +79,7 @@ Edit the config/auth.js file for including the serializer. For example on the ap
     uid: 'email',
     password: 'password'
   },
-
+  
   basic: {
     serializer: 'LucidMongo',
     model: 'App/Models/User',
@@ -112,15 +112,15 @@ Edit the config/auth.js file for including the serializer. For example on the ap
   },
 ```
 
-## Usage
+## Usage 
 
-Once done you can access `MongoDatabase` provider and run mongo queries as follows.
+Once done you can access `Database` provider and run mongo queries as follows.
 
 ```js
-const MongoDatabase = use('MongoDatabase');
+const Database = use('Database')
 
-await MongoDatabase.collection('users').find({});
-await MongoDatabase.collection('users').paginate();
+await Database.collection('users').find()
+await Database.collection('users').paginate()
 ```
 
 ## Migrations Provider
@@ -130,7 +130,9 @@ This repo also comes with a migrations and seeds provider to run to migrate your
 Make sure to register migrations provider under `aceProviders` array.
 
 ```js
-const aceProviders = ['@ruanitto/lucid-mongo/providers/MigrationsProvider'];
+const aceProviders = [
+  'lucid-mongo/providers/MigrationsProvider'
+]
 ```
 
-After this running `adonis --help` will list a set of commands under `mongomigration` namespace.
+After this running `adonis --help` will list a set of commands under `migration` namespace.

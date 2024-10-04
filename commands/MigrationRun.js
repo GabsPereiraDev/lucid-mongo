@@ -21,9 +21,9 @@ class MigrationRun extends BaseMigration {
    *
    * @return {String}
    */
-  static get signature() {
+  static get signature () {
     return `
-    mongomigration:run
+    migration:run
     { -f, --force: Forcefully run migrations in production }
     { -s, --silent: Silent the migrations output }
     { --log: Log SQL queries instead of executing them }
@@ -37,7 +37,7 @@ class MigrationRun extends BaseMigration {
    *
    * @return {String}
    */
-  static get description() {
+  static get description () {
     return 'Run all pending migrations'
   }
 
@@ -55,7 +55,7 @@ class MigrationRun extends BaseMigration {
    *
    * @return {void|Array}
    */
-  async handle(args, { log, force, silent }) {
+  async handle (args, { log, force, silent }) {
     try {
       this._validateState(force)
 

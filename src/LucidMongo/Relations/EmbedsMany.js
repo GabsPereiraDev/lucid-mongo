@@ -10,7 +10,7 @@ const _ = require('lodash')
 const BaseRelation = require('./BaseRelation')
 const util = require('../../../lib/util')
 const CE = require('../../Exceptions')
-const ObjectID = require('mongodb').ObjectID
+const ObjectId = require('mongodb').ObjectId
 
 class EmbedsMany extends BaseRelation {
   constructor (parentInstance, RelatedModel, primaryKey, foreignKey) {
@@ -27,7 +27,7 @@ class EmbedsMany extends BaseRelation {
    * @method _persistParentIfRequired
    * @async
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @private
    */
@@ -84,7 +84,7 @@ class EmbedsMany extends BaseRelation {
    */
   async eagerLoad (rows) {
     const relatedInstances = []
-    rows.map(row => {
+    rows.forEach(row => {
       _.map(row.$attributes[this.foreignKey], embed => {
         const relatedInstance = this._mapRowToInstance(embed)
         relatedInstance.$sideLoaded[`embed_${this.foreignKey}`] = row.primaryKeyValue
@@ -119,7 +119,7 @@ class EmbedsMany extends BaseRelation {
 
     if (!relatedInstance.primaryKeyValue) {
       await this.RelatedModel.$hooks.before.exec('create', relatedInstance)
-      relatedInstance.primaryKeyValue = new ObjectID()
+      relatedInstance.primaryKeyValue = new ObjectId()
       relatedInstance._setCreatedAt(relatedInstance.$attributes)
       relatedInstance._setUpdatedAt(relatedInstance.$attributes)
       embeds.push(relatedInstance._formatFields(relatedInstance.$attributes))
@@ -132,7 +132,8 @@ class EmbedsMany extends BaseRelation {
       relatedInstance._setUpdatedAt(relatedInstance.$attributes)
       embeds = embeds.map(embed => {
         return String(embed[this.primaryKey]) === String(relatedInstance.primaryKeyValue)
-          ? relatedInstance._formatFields(relatedInstance.$attributes) : embed
+          ? relatedInstance._formatFields(relatedInstance.$attributes)
+          : embed
       })
       this.parentInstance[this.foreignKey] = embeds
       await this.parentInstance.save()

@@ -29,7 +29,7 @@ class HasMany extends BaseRelation {
    *
    * @method _persistParentIfRequired
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @private
    */

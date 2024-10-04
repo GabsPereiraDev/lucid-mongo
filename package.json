@@ -2,8 +2,20 @@
   "name": "@geiras/lucid-mongo",
   "description": "A Mongodb ODM",
   "main": "index.js",
-  "version": "4.2.5",
-  "scripts": {},
+  "version": "4.2.6",
+  "scripts": {
+    "lint": "standard",
+    "fix": "standard --fix",
+    "pretest": "npm run test:cleanup && npm run lint",
+    "test:cleanup": "rm -rf test/functional/database && rm -rf test/unit/tmp",
+    "posttest": "npm run test:cleanup && npm run coverage",
+    "test:local": "npm run test:cleanup && FORCE_COLOR=true DB=mongodb node japaFile.js",
+    "test": "nyc npm run test:local",
+    "test:win": "set DB=mongodb&& node japaFile.js",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 1",
+    "commit": "git-cz"
+  },
   "keywords": [
     "adonis",
     "lucid",
@@ -12,34 +24,62 @@
     "orm",
     "odm"
   ],
+  "standard": {
+    "global": [
+      "use",
+      "describe",
+      "it",
+      "after",
+      "before",
+      "context",
+      "make",
+      "beforeEach"
+    ]
+  },
   "author": "LuongND",
   "license": "MIT",
-  "files": [
-    "commands",
-    "lib",
-    "providers",
-    "src",
-    "templates",
-    "index.js",
-    "instructions.js",
-    "instructions.md"
-  ],
   "dependencies": {
-    "@adonisjs/generic-exceptions": "^3.0.1",
-    "chance": "^1.1.7",
-    "debug": "^4.2.0",
-    "geo-point": "^1.2.2",
-    "lodash": "^4.17.20",
-    "moment": "^2.29.1",
-    "mongo-uri-builder": "^3.2.2",
-    "mongodb": "^4.17.2",
-    "mquery": "^3.2.2",
+    "@adonisjs/generic-exceptions": "^2.0.1",
+    "chance": "^1.0.18",
+    "debug": "^4.1.1",
+    "geo-point": "^2.0.2",
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0",
+    "mongo-uri-builder": "^4.0.0",
+    "mongodb": "^6.6.2",
+    "mquery": "^5.0.0",
     "pluralize": "^8.0.0",
     "pretty-hrtime": "^1.0.3",
     "require-all": "^3.0.0"
   },
+  "devDependencies": {
+    "@adonisjs/ace": "^5.0.8",
+    "@adonisjs/fold": "^4.0.9",
+    "@adonisjs/sink": "^1.0.17",
+    "clear-require": "^3.0.0",
+    "conventional-changelog-cli": "^2.0.21",
+    "coveralls": "^3.0.4",
+    "cz-conventional-changelog": "^3.0.0",
+    "fs-extra": "^11.2.0",
+    "japa": "^2.0.10",
+    "japa-cli": "^1.0.1",
+    "nyc": "^15.1.0",
+    "standard": "^17.1.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "nyc": {
+    "include": [
+      "src",
+      "lib"
+    ]
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/zakodium/lucid-mongo.git"
-  }
+    "url": "https://github.com/duyluonglc/lucid-mongo.git"
+  },
+  "snyk": true
 }

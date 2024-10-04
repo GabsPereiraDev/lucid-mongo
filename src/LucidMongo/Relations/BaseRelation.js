@@ -65,7 +65,7 @@ class BaseRelation {
      * @param  {String} fk
      * @param  {Array} rows
      *
-     * @return {void}
+     * @return {undefined}
      */
     this._eagerLoadFn = function (query, fk, values) {
       query.whereIn(fk, values)
@@ -92,7 +92,7 @@ class BaseRelation {
    *
    * @method eagerLoadQuery
    *
-   * @return {void}
+   * @return {undefined}
    */
   eagerLoadQuery (fn) {
     this._eagerLoadFn = fn
@@ -139,7 +139,7 @@ class BaseRelation {
    *
    * @method _decorateQuery
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @private
    */
@@ -152,7 +152,7 @@ class BaseRelation {
    *
    * @method _validateRead
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @throws {RuntimeException} If parent model is not persisted
    *
@@ -205,7 +205,10 @@ class BaseRelation {
    */
   query (params) {
     if (_.isObject(params)) {
-      if (params.select) { this.relatedQuery.select(params.select) }
+      if (params.select) {
+        this.relatedQuery.select(params.select)
+        this.relatedQuery.$useProjection = true
+      }
       if (params.where) { this.relatedQuery.where(params.where) }
       if (params.with) { this.relatedQuery.with(params.with) }
       if (params.limit) { this.relatedQuery.limit(params.limit) }

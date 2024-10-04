@@ -41,7 +41,7 @@ class MorphMany extends BaseRelation {
    *
    * @method _persistParentIfRequired
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @private
    */

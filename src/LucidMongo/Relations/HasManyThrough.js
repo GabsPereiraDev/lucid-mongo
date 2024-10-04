@@ -38,7 +38,7 @@ class HasManyThrough extends BaseRelation {
    *
    * @method _makeJoinQuery
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @private
    */
@@ -56,7 +56,7 @@ class HasManyThrough extends BaseRelation {
    *
    * @method _selectFields
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @private
    */
@@ -70,7 +70,7 @@ class HasManyThrough extends BaseRelation {
    *
    * @method _decorateQuery
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @private
    */
@@ -196,7 +196,7 @@ class HasManyThrough extends BaseRelation {
       .fetch()
     const relatedRows = []
     thoughInstances.rows.forEach(thoughInstance => {
-      let relates = thoughInstance.getRelated(this.relatedMethod)
+      const relates = thoughInstance.getRelated(this.relatedMethod)
       if (relates instanceof this.relatedQuery.Model) {
         const newRelated = new this.relatedQuery.Model()
         newRelated.newUp(relates.$attributes)

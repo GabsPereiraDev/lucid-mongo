@@ -39,13 +39,14 @@ class ReferMany extends BaseRelation {
    *
    * @method _decorateQuery
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @private
    */
   _decorateQuery () {
     this.relatedQuery.whereIn(this.primaryKey, this.parentInstance[this.foreignKey] || [])
   }
+
   /**
      * Persists the parent model instance if it's not
      * persisted already. This is done before saving
@@ -53,7 +54,7 @@ class ReferMany extends BaseRelation {
      *
      * @method _persistParentIfRequired
      *
-     * @return {void}
+     * @return {undefined}
      *
      * @private
      */
@@ -79,9 +80,9 @@ class ReferMany extends BaseRelation {
       return this.group([])
     }
     const relatedInstances = await this.relatedQuery.whereIn(this.primaryKey, mappedRows).fetch()
-    let result = []
-    rows.map(modelInstance => {
-      relatedInstances.rows.map(related => {
+    const result = []
+    rows.forEach(modelInstance => {
+      relatedInstances.rows.forEach(related => {
         const foreignKeys = modelInstance[this.foreignKey] || []
         if (foreignKeys.map(String).includes(String(related.primaryKeyValue))) {
           const newRelated = new this.RelatedModel()
@@ -230,7 +231,7 @@ class ReferMany extends BaseRelation {
    * @param  {Object} relatedInstance
    * @param  {Function} pivotCallback
    *
-   * @return {void}
+   * @return {undefined}
    */
   async save (relatedInstance) {
     await this._persistParentIfRequired()
@@ -259,7 +260,7 @@ class ReferMany extends BaseRelation {
    *
    * @param  {Array}    arrayOfRelatedInstances
    *
-   * @return {void}
+   * @return {undefined}
    */
   async saveMany (arrayOfRelatedInstances) {
     if (!Array.isArray(arrayOfRelatedInstances)) {

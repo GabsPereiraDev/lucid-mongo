@@ -11,8 +11,8 @@
 
 const _ = require('lodash')
 const moment = require('moment')
-const GeoPoint = require('geo-point')
-const ObjectID = require('mongodb').ObjectID
+const { GeoPoint } = require('geo-point')
+const ObjectId = require('mongodb').ObjectId
 const { resolver, ioc } = require('../../../lib/iocResolver')
 const GE = require('@adonisjs/generic-exceptions')
 const BaseModel = require('./Base')
@@ -53,7 +53,7 @@ class Model extends BaseModel {
    *
    * @method _bootIfNotBooted
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @private
    *
@@ -168,7 +168,7 @@ class Model extends BaseModel {
    *
    * @param  {Mixed}        value
    *
-   * @return {void}
+   * @return {undefined}
    */
   set primaryKeyValue (value) {
     this.$attributes[this.constructor.primaryKey] = value
@@ -230,7 +230,10 @@ class Model extends BaseModel {
     })
 
     if (_.isObject(params)) {
-      if (params.select) { query.select(params.select) }
+      if (params.select) {
+        query.select(params.select)
+        query.$useProjection = true
+      }
       if (params.where) { query.where(params.where) }
       if (params.with) { query.with(params.with) }
       if (params.limit) { query.limit(params.limit) }
@@ -251,7 +254,7 @@ class Model extends BaseModel {
    *
    * @method boot
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @static
    */
@@ -266,7 +269,7 @@ class Model extends BaseModel {
    *
    * @method hydrate
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @static
    */
@@ -528,7 +531,7 @@ class Model extends BaseModel {
     // objectID
     _(this.constructor.objectIDs)
       .filter((key) => values[key] && typeof (this[util.getSetterName(key)]) !== 'function')
-      .each((key) => { values[key] = this.constructor.formatObjectID(key, values[key]) })
+      .each((key) => { values[key] = this.constructor.formatObjectId(key, values[key]) })
 
     // geometry
     _(this.constructor.geometries)
@@ -631,7 +634,7 @@ class Model extends BaseModel {
    *
    * @method _syncOriginals
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @private
    */
@@ -706,16 +709,28 @@ class Model extends BaseModel {
     let affected = 0
 
     if (this.isDirty || _.size(this.$unsetAttributes)) {
-      const dirty = this.dirty
+      const changedValues = this.dirty
+      const dirty = {}
+
+      /**
+       * Set attributes
+       */
+      if (_.size(changedValues)) {
+        dirty.$set = changedValues
+      }
+
       /**
        * Unset attributes
        */
       if (_.size(this.$unsetAttributes)) {
-        dirty['$unset'] = this.$unsetAttributes
+        dirty.$unset = this.$unsetAttributes
       }
+
       /**
        * Set proper timestamps
        */
+      this._setUpdatedAt(this.$attributes)
+
       affected = await this.constructor
         .query()
         .where(this.constructor.primaryKey, this.primaryKeyValue)
@@ -737,13 +752,13 @@ class Model extends BaseModel {
   }
 
   /**
-   * Converts all fields to objects: moment, ObjectID, GeoPoint, so
+   * Converts all fields to objects: moment, ObjectId, GeoPoint, so
    * that you can transform them into something
    * else.
    *
    * @method _convertFieldToObjectInstances
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @private
    */
@@ -755,7 +770,7 @@ class Model extends BaseModel {
     })
     this.constructor.objectIDs.forEach((field) => {
       if (this.$attributes[field]) {
-        this.$attributes[field] = this.constructor.parseObjectID(field, this.$attributes[field])
+        this.$attributes[field] = this.constructor.parseObjectId(field, this.$attributes[field])
       }
     })
     this.constructor.geometries.forEach((field) => {
@@ -782,7 +797,7 @@ class Model extends BaseModel {
    * @param  {String} name
    * @param  {Mixed} value
    *
-   * @return {void}
+   * @return {undefined}
    */
   set (name, value) {
     this.$attributes[name] = this._getSetterValue(name, value)
@@ -805,8 +820,8 @@ class Model extends BaseModel {
        */
       if (value instanceof moment && typeof (this[util.getGetterName(key)]) !== 'function') {
         result[key] = this.constructor.castDates(key, value)
-      } else if (value instanceof ObjectID && typeof (this[util.getGetterName(key)]) !== 'function') {
-        result[key] = this.constructor.castObjectID(key, value)
+      } else if (value instanceof ObjectId && typeof (this[util.getGetterName(key)]) !== 'function') {
+        result[key] = this.constructor.castObjectId(key, value)
       } else if (value instanceof GeoPoint && typeof (this[util.getGetterName(key)]) !== 'function') {
         result[key] = this.constructor.castGeometry(key, value)
       } else {
@@ -872,7 +887,7 @@ class Model extends BaseModel {
     /**
      * If model was delete then freeze it modifications
      */
-    if (response.result.n > 0) {
+    if (response) {
       this.freeze()
     }
 
@@ -880,7 +895,7 @@ class Model extends BaseModel {
      * Executing after hooks
      */
     await this.constructor.$hooks.after.exec('delete', this)
-    return !!response.result.ok
+    return response
   }
 
   /**
@@ -892,7 +907,7 @@ class Model extends BaseModel {
    *
    * @param  {Object} row
    *
-   * @return {void}
+   * @return {undefined}
    */
   newUp (row) {
     this.$persisted = true
@@ -1138,7 +1153,7 @@ class Model extends BaseModel {
    * @param  {String}   relation
    * @param  {Function} callback
    *
-   * @return {void}
+   * @return {undefined}
    */
   async load (relation, callback) {
     const eagerLoad = new EagerLoad({ [relation]: callback })
@@ -1155,7 +1170,7 @@ class Model extends BaseModel {
    *
    * @param  {Object} eagerLoadMap
    *
-   * @return {void}
+   * @return {undefined}
    */
   async loadMany (eagerLoadMap) {
     const eagerLoad = new EagerLoad(eagerLoadMap)
@@ -1392,7 +1407,7 @@ class Model extends BaseModel {
    *
    * @method reload
    *
-   * @return {void}
+   * @return {undefined}
    */
   async reload () {
     if (this.$frozen) {
@@ -1436,7 +1451,7 @@ const shortHands = [
   'distinct'
 ]
 
-shortHands.map(method => {
+shortHands.forEach(method => {
   Model[method] = function (...args) {
     const query = this.query()
     return query[method].apply(query, args)

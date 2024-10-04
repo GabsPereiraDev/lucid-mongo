@@ -112,7 +112,7 @@ class Factory {
    *
    * @method clear
    *
-   * @return {void}
+   * @return {undefined}
    */
   clear () {
     this._blueprints = []

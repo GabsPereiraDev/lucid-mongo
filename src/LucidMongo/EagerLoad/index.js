@@ -35,7 +35,7 @@ class EagerLoad {
    * @param  {Object}     relationInstance
    * @param  {Function}   callback
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @private
    */
@@ -55,7 +55,7 @@ class EagerLoad {
    * @param  {Object}     options.relatedQuery
    * @param  {Object}     nested
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @private
    */
@@ -115,7 +115,7 @@ class EagerLoad {
    *
    * @param  {Array} modelInstances
    *
-   * @return {void}
+   * @return {undefined}
    */
   async load (modelInstances) {
     const relationsKeys = _.keys(this._relations)

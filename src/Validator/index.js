@@ -58,7 +58,7 @@ class ValidatorRules {
       /**
        * Extracting values of the args array
        */
-      const [ collection, fieldName, ignoreKey, ignoreValue ] = args
+      const [collection, fieldName, ignoreKey, ignoreValue] = args
 
       /**
        * Base query to select where key=value
@@ -73,7 +73,7 @@ class ValidatorRules {
       }
 
       query
-        .find({})
+        .find()
         .then((rows) => {
           /**
            * Unique validation fails when a row has been found

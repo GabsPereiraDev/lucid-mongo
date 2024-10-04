@@ -28,7 +28,7 @@ class HasOne extends BaseRelation {
    *
    * @method _persistParentIfRequired
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @private
    */

@@ -86,6 +86,7 @@ class RelationParser {
    * @return {Object}
    */
   parseRelation (relation, callback = null) {
+    // eslint-disable-next-line
     let [name, nested] = relation.split(/\.(.+)/)
 
     /**
@@ -111,7 +112,7 @@ class RelationParser {
    * @param  {Object}                   modelInstance
    * @param  {String}                   relation
    *
-   * @return {void}
+   * @return {undefined}
    */
   validateRelationExistence (modelInstance, relation) {
     if (typeof (modelInstance[relation]) !== 'function') {
@@ -128,7 +129,7 @@ class RelationParser {
    * @param  {Object}            modelInstance
    * @param  {String}            relation
    *
-   * @return {void}
+   * @return {undefined}
    */
   getRelatedInstance (modelInstance, relation) {
     return modelInstance[relation]()

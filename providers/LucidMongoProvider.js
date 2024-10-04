@@ -18,17 +18,17 @@ class LucidMongoProvider extends ServiceProvider {
    *
    * @method _registerDatabase
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @private
    */
-  _registerDatabase() {
-    this.app.singleton('Adonis/Src/MongoDatabase', (app) => {
+  _registerDatabase () {
+    this.app.singleton('Adonis/Src/Database', (app) => {
       const Config = app.use('Adonis/Src/Config')
-      const MongoDatabase = require('../src/Database/Manager')
-      return new MongoDatabase(Config)
+      const Database = require('../src/Database/Manager')
+      return new Database(Config)
     })
-    this.app.alias('Adonis/Src/MongoDatabase', 'MongoDatabase')
+    this.app.alias('Adonis/Src/Database', 'Database')
   }
 
   /**
@@ -37,19 +37,19 @@ class LucidMongoProvider extends ServiceProvider {
    *
    * @method _registerModel
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @private
    */
-  _registerModel() {
-    this.app.bind('Adonis/Src/MongoModel', (app) => require('../src/LucidMongo/Model'))
-    this.app.alias('Adonis/Src/MongoModel', 'MongoModel')
+  _registerModel () {
+    this.app.bind('Adonis/Src/Model', (app) => require('../src/LucidMongo/Model'))
+    this.app.alias('Adonis/Src/Model', 'Model')
   }
 
   /**
    * Registering the serializer for auth
    */
-  _registerSerializer() {
+  _registerSerializer () {
     try {
       if (ioc.use('Adonis/Src/Auth')) {
         ioc.extend('Adonis/Src/Auth',
@@ -67,11 +67,11 @@ class LucidMongoProvider extends ServiceProvider {
    *
    * @private
    */
-  _addUniqueRule() {
+  _addUniqueRule () {
     try {
       const { extend } = this.app.use('Adonis/Addons/Validator')
-      const MongoDatabase = this.app.use('Adonis/Src/MongoDatabase')
-      const validatorRules = new (require('../src/Validator'))(MongoDatabase)
+      const Database = this.app.use('Adonis/Src/Database')
+      const validatorRules = new (require('../src/Validator'))(Database)
 
       /**
        * Extend by adding the rule
@@ -85,9 +85,9 @@ class LucidMongoProvider extends ServiceProvider {
    *
    * @method register
    *
-   * @return {void}
+   * @return {undefined}
    */
-  register() {
+  register () {
     this._registerDatabase()
     this._registerModel()
     this._registerSerializer()
@@ -98,9 +98,9 @@ class LucidMongoProvider extends ServiceProvider {
    *
    * @method boot
    *
-   * @return {void}
+   * @return {undefined}
    */
-  boot() {
+  boot () {
     this._addUniqueRule()
 
     /**

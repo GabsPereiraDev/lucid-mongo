@@ -9,8 +9,6 @@
  * file that was distributed with this source code.
 */
 
-// require('./MonkeyPatch')
-
 const _ = require('lodash')
 const Database = require('.')
 const CE = require('../Exceptions')
@@ -40,7 +38,7 @@ const proxyGet = require('../../lib/proxyGet')
  * @class DatabaseManager
  */
 class DatabaseManager {
-  constructor(Config) {
+  constructor (Config) {
     this.Config = Config
     this._connectionPools = {}
     return new Proxy(this, {
@@ -57,14 +55,14 @@ class DatabaseManager {
    *
    * @method connection
    *
-   * @param  {String}   [name = Config.get('mongodatabase.connection')]
+   * @param  {String}   [name = Config.get('database.connection')]
    *
    * @return {Database}
    *
    * @throws {missingDatabaseConnection} If connection is not defined in config file.
    */
-  connection(name) {
-    name = name || this.Config.get('mongodatabase.connection')
+  connection (name) {
+    name = name || this.Config.get('database.connection')
     /**
      * Return connection if part of connection pool already
      */
@@ -72,7 +70,7 @@ class DatabaseManager {
       return this._connectionPools[name]
     }
 
-    const connectionSettings = this.Config.get(`mongodatabase.${name}`)
+    const connectionSettings = this.Config.get(`database.${name}`)
     if (!connectionSettings) {
       throw CE.RuntimeException.missingDatabaseConnection(name)
     }
@@ -91,7 +89,7 @@ class DatabaseManager {
    *
    * @param {String|Array} [names = *]
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @example
    * ```js
@@ -105,7 +103,7 @@ class DatabaseManager {
    * Database.close('mysql')
    * ```
    */
-  close(names) {
+  close (names) {
     let connections = names || _.keys(this._connectionPools)
     connections = !Array.isArray(connections) ? [connections] : connections
     _.each(connections, (name) => {

@@ -197,7 +197,7 @@ class LucidMongoSerializer {
    * @param  {String}  token
    * @param  {String}  type
    *
-   * @return {void}
+   * @return {undefined}
    */
   async saveToken (user, token, type) {
     const tokenInstance = new (user.tokens()).RelatedModel()

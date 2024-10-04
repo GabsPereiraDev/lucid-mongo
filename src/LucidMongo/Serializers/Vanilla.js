@@ -60,7 +60,7 @@ class VanillaSerializer {
    * @param  {Model}         modelInstance
    * @param  {Object}         output
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @private
    */
@@ -79,7 +79,7 @@ class VanillaSerializer {
    * @param  {Model}    modelInstance
    * @param  {Object}    output
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @private
    */

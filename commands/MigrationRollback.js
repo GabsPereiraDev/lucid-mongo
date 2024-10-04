@@ -21,9 +21,9 @@ class MirationRollback extends BaseMigration {
    *
    * @return {String}
    */
-  static get signature() {
+  static get signature () {
     return `
-    mongomigration:rollback
+    migration:rollback
     { -b, --batch=@value: Rollback upto a specific batch number }
     { -f, --force: Forcefully run migrations in production }
     { -s, --silent: Silent the migrations output }
@@ -38,7 +38,7 @@ class MirationRollback extends BaseMigration {
    *
    * @return {String}
    */
-  static get description() {
+  static get description () {
     return 'Rollback migration to latest batch or to a specific batch number'
   }
 
@@ -57,7 +57,7 @@ class MirationRollback extends BaseMigration {
    *
    * @return {void|Array}
    */
-  async handle(args, { log, force, batch, silent }) {
+  async handle (args, { log, force, batch, silent }) {
     try {
       batch = batch ? Number(batch) : null
 

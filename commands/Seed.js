@@ -16,7 +16,7 @@ const { ioc } = require('@adonisjs/fold')
 const prettyHrTime = require('pretty-hrtime')
 
 class SeedDatabase extends Command {
-  constructor(Helpers, Database) {
+  constructor (Helpers, Database) {
     super()
     this._seedsPath = Helpers.seedsPath()
     this.Database = Database
@@ -29,8 +29,8 @@ class SeedDatabase extends Command {
    *
    * @return {Array}
    */
-  static get inject() {
-    return ['Adonis/Src/Helpers', 'Adonis/Src/MongoDatabase']
+  static get inject () {
+    return ['Adonis/Src/Helpers', 'Adonis/Src/Database']
   }
 
   /**
@@ -42,7 +42,7 @@ class SeedDatabase extends Command {
    *
    * @private
    */
-  _getSeedFiles(selectedFiles) {
+  _getSeedFiles (selectedFiles) {
     return requireAll({
       dirname: this._seedsPath,
       filter: (fileName) => {
@@ -63,13 +63,13 @@ class SeedDatabase extends Command {
    *
    * @param  {Boolean}       force
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @private
    *
    * @throws {Error} If NODE_ENV is production
    */
-  _validateState(force) {
+  _validateState (force) {
     if (process.env.NODE_ENV === 'production' && !force) {
       throw new Error('Cannot run seeds in production. Use --force flag to continue')
     }
@@ -82,9 +82,9 @@ class SeedDatabase extends Command {
    *
    * @return {String}
    */
-  static get signature() {
+  static get signature () {
     return `
-    mongoseed
+    seed
     { -f, --force: Forcefully seed database in production }
     { -a, --keep-alive: Do not close database connection when seeder.run finishes }
     { --files=@value: Run only selected files }
@@ -98,7 +98,7 @@ class SeedDatabase extends Command {
    *
    * @return {String}
    */
-  static get description() {
+  static get description () {
     return 'Seed database using seed files'
   }
 
@@ -116,7 +116,7 @@ class SeedDatabase extends Command {
    *
    * @return {void|Array}
    */
-  async handle(args, { force, files, keepAlive }) {
+  async handle (args, { force, files, keepAlive }) {
     try {
       this._validateState(force)
 

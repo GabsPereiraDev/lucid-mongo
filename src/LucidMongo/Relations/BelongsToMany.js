@@ -132,7 +132,7 @@ class BelongsToMany extends BaseRelation {
    * @param  {String}       key
    * @param  {...Spread}    args
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @private
    */
@@ -146,7 +146,7 @@ class BelongsToMany extends BaseRelation {
    *
    * @method _decorateQuery
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @private
    */
@@ -257,7 +257,7 @@ class BelongsToMany extends BaseRelation {
    * @method _persistParentIfRequired
    * @async
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @private
    */
@@ -275,7 +275,7 @@ class BelongsToMany extends BaseRelation {
    * @method _loadAndCachePivot
    * @async
    *
-   * @return {void}
+   * @return {undefined}
    *
    * @private
    */
@@ -433,13 +433,13 @@ class BelongsToMany extends BaseRelation {
     const pivotInstances = await this.pivotQuery().fetch()
     const foreignKeyValues = _.map(pivotInstances.rows, this.relatedForeignKey)
     const relatedInstances = await this.relatedQuery.whereIn(this.relatedPrimaryKey, foreignKeyValues).fetch()
-    let result = []
-    rows.map(modelInstance => {
+    const result = []
+    rows.forEach(modelInstance => {
       const modelPivots = _.filter(pivotInstances.rows, pivot => {
         return String(pivot[this.foreignKey]) === String(modelInstance.primaryKeyValue)
       })
-      modelPivots.map(pivot => {
-        relatedInstances.rows.map(related => {
+      modelPivots.forEach(pivot => {
+        relatedInstances.rows.forEach(related => {
           if (String(related.primaryKeyValue) === String(pivot[this.relatedForeignKey])) {
             const newRelated = new this.RelatedModel()
             newRelated.newUp(related.$attributes)
@@ -765,7 +765,7 @@ class BelongsToMany extends BaseRelation {
    * @param  {Number|String|Array} relatedPrimaryKeyValue
    * @param  {Function} [pivotCallback]
    *
-   * @return {void}
+   * @return {undefined}
    */
   async sync (references, pivotCallback) {
     await this._loadAndCachePivot()
@@ -803,7 +803,7 @@ class BelongsToMany extends BaseRelation {
    * @param  {Object} relatedInstance
    * @param  {Function} pivotCallback
    *
-   * @return {void}
+   * @return {undefined}
    */
   async save (relatedInstance, pivotCallback) {
     await this._persistParentIfRequired()
@@ -838,7 +838,7 @@ class BelongsToMany extends BaseRelation {
    * @param  {Array}    arrayOfRelatedInstances
    * @param  {Function} [pivotCallback]
    *
-   * @return {void}
+   * @return {undefined}
    */
   async saveMany (arrayOfRelatedInstances, pivotCallback) {
     if (!Array.isArray(arrayOfRelatedInstances)) {

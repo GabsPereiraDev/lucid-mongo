@@ -20,9 +20,9 @@ class MigrationRefresh extends BaseMigration {
    *
    * @return {String}
    */
-  static get signature() {
+  static get signature () {
     return `
-    mongomigration:refresh
+    migration:refresh
     { -f, --force: Forcefully run migrations in production }
     { -s, --silent: Silent the migrations output }
     { --log: Log SQL queries instead of executing them }
@@ -36,7 +36,7 @@ class MigrationRefresh extends BaseMigration {
    *
    * @return {String}
    */
-  static get description() {
+  static get description () {
     return 'Refresh migrations by performing rollback and then running from start'
   }
 
@@ -55,10 +55,10 @@ class MigrationRefresh extends BaseMigration {
    *
    * @return {void|Array}
    */
-  async handle(args, { log, force, silent }) {
+  async handle (args, { log, force, silent }) {
     this._validateState(force)
-    await ace.call('mongomigration:reset', {}, { log, force, silent })
-    await ace.call('mongomigration:run', {}, { log, force, silent })
+    await ace.call('migration:reset', {}, { log, force, silent })
+    await ace.call('migration:run', {}, { log, force, silent })
   }
 }
 
